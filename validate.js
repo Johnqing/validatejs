@@ -297,8 +297,8 @@
             }
         },
         // 设置验证规则
-        setCheck : function(rule){
-            this.check[rule] = rule;
+        setCheck : function(rule,fn){
+            this.check[rule] = fn;
             // 链式调用
             return this;
         },
