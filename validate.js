@@ -10,7 +10,7 @@
 		        succeed:"",
 		        req:"请输入用户名",
 		        error:{
-		            beUsed:"该用户名已被使用，请使用其它用户名注册，如果您是&quot;{1}&quot;，请<a href='https://passport.360buy.com/new/login.aspx' class='flk13'>登录</a>",
+		            isAjax:"该用户名已被使用，请使用其它用户名注册，如果您是&quot;{1}&quot;，请<a href='https://passport.360buy.com/new/login.aspx' class='flk13'>登录</a>",
 		            badLength:"用户名长度只能在4-20位字符之间",
 		            badFormat:"用户名只能由中文、英文、数字及“_”、“-”组成",
 		            fullNumberName:"用户名不能全为数字"
@@ -30,7 +30,9 @@
 		        onFocus:"请输入图片中的字符，不区分大小写",
 		        succeed:"",
 		        req:"请输入验证码",
-		        error:"验证码错误"
+		        error:{
+                    base:"验证码错误"
+                }
 		    },
 		    empty:{
 		        onFocus:"",
@@ -187,11 +189,21 @@
         		};
         		if (!isTrue) {
         			// 错误信息处理
-                    if (method === "required") {
-                        this.errors.push(defaults.messages[field.name]['req']);
-                        return;
-                    }
-                    this.errors.push(defaults.messages[method]);
+                    switch(method){
+                        case 'required':
+                            this.errors.push(defaults.messages[field.name]['req']);
+                            break;
+                        case 'isAjax':
+                            this.errors.push(defaults.messages[field.name]['error']['isAjax']);
+                            break;
+                        case 'min_length' :
+                        case 'max_length':
+                            this.errors.push(defaults.messages[field.name]['error']['badLength']);
+                            break;
+                        default :
+                            this.errors.push(defaults.messages[field.name]['error'][method]);
+                    }    
+                    return;                
         		};     		
         	};
         	return;
@@ -217,25 +229,72 @@
 	            }
 	            return (field.value.length <= parseInt(length, 10));
 	        },
-		    isUid:function (str) {
-		        return new RegExp(validateRegExp.username).test(str);
+		    isUid:function (field) {
+                var value = field.value;
+		        return new RegExp(validateRegExp.username).test(value);
 		    },
-		    fullNumberName:function (str) {
-		        return new RegExp(validateRegExp.fullNumber).test(str);
+		    fullNumberName:function (field) {
+                 var value = field.value;
+		        return new RegExp(validateRegExp.fullNumber).test(value);
 		    },
-		    isEmail:function (str) {
-		        return new RegExp(validateRegExp.email).test(str);
+		    isEmail:function (field) {
+                 var value = field.value;
+		        return new RegExp(validateRegExp.email).test(value);
 		    },
-		    isTel:function (str) {
-		        return new RegExp(validateRegExp.tel).test(str);
+		    isTel:function (field) {
+                 var value = field.value;
+		        return new RegExp(validateRegExp.tel).test(value);
 		    },
-		    isMobile:function (str) {
-		        return new RegExp(validateRegExp.mobile).test(str);
+		    isMobile:function (field) {
+                 var value = field.value;
+		        return new RegExp(validateRegExp.mobile).test(value);
 		    },
 		    checkType:function (element) {
 		        return (element.attr("type") == "checkbox" || element.attr("type") == "radio" || element.attr("rel") == "select");
-		    }
-
+		    },
+            isChinese:function (str) {
+                return new RegExp(validateRegExp.chinese).test(str);
+            },
+            isRealName:function (str) {
+                return new RegExp(validateRegExp.realname).test(str);
+            },
+            isDeptname:function (str) {
+                return new RegExp(validateRegExp.deptname).test(str);
+            },
+            isCompanyname:function (str) {
+                return new RegExp(validateRegExp.companyname).test(str);
+            },
+            isCompanyaddr:function (str) {
+                return new RegExp(validateRegExp.companyaddr).test(str);
+            },
+            isCompanysite:function (str) {
+                return new RegExp(validateRegExp.companysite).test(str);
+            },
+            simplePwd:function (str) {
+                var pin = "";
+                if ($("#username").length > 0) {
+                    pin = $("#username").val();
+                }
+                if ($("#emType").length > 0) {
+                    var emType = $("#emType").val();
+                    if (emType == "mobile") {
+                        pin = $("#mobileInfo").val();
+                    } else {
+                        pin = $("#mail").val();
+                    }
+                }
+                if (pin.length > 0) {
+                    pin = strTrim(pin);
+                    if (pin == str) {
+                        return true;
+                    }
+                }
+                return pwdLevel(str) == 1;
+            },
+            isAjax : function(field,url){
+                console.log(url);
+                return false;
+            }
         }
     };
     Validate.prototype = methods;
