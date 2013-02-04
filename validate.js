@@ -296,9 +296,11 @@
                 return false;
             }
         },
-        // 设置验证
-        setCheck : function(){
-            this.check[]
+        // 设置验证规则
+        setCheck : function(rule){
+            this.check[rule] = rule;
+            // 链式调用
+            return this;
         },
         // 设置自定义错误信息
         setMessage : function(rule, message){
