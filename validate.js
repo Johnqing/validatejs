@@ -295,6 +295,16 @@
                 console.log(url);
                 return false;
             }
+        },
+        // 设置验证
+        setCheck : function(){
+            this.check[]
+        },
+        // 设置自定义错误信息
+        setMessage : function(rule, message){
+            this.messages[rule] = message;
+            // 链式调用
+            return this;
         }
     };
     Validate.prototype = methods;
