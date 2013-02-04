@@ -19,7 +19,7 @@
 window.onload = function(){
 	var f = new Validate('form_node',[{
 		name  : 'username',
-		rules : 'required|min_length[8]'
+		rules : 'required|min_length[8]|isUid|isAjax[http://baidu.com]'
 	},{
 		name  : 'pwd',
 		rules : 'required'
