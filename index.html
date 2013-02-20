@@ -7,31 +7,20 @@
 <body>
 	<div id="error"></div>
 	<div class="validate_box">
-		<form action="" name="form_node">
+		<form action="" name="form_node" id="form01">
 			<input type="text" name="username">
 			<input type="text" name="pwd">
 			<input type="submit" value="submit">
 		</form>
 		
 	</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" type="text/javascript"></script> 
+<script type="text/javascript" src="prompt.js"></script>
 <script type="text/javascript" src="validate.js"></script>
 <script type="text/javascript">
-window.onload = function(){
-	var f = new Validate('form_node',[{
-		name  : 'username',
-		rules : 'required|min_length[8]|isUid|isAjax[http://baidu.com]'
-	},{
-		name  : 'pwd',
-		rules : 'required'
-	}],function(error,event){
-		 for (var i = 0; i < error.length; i++) {
-		 	var errorNode = document.createElement('p');
-		 	errorNode.innerHTML = error[i]
-		 	document.getElementById('error').appendChild(errorNode);
-		 };
-	});
-
-}
+$(function(){
+	$('#form01').jd_validation();
+});
 </script>
 </body>
 </html>
